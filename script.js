@@ -1,6 +1,10 @@
-function main(n) {
-    const root = document.querySelector(':root');
+const root = document.querySelector(':root');
+let shapeContainter = document.querySelector('.shape');
+
+function generateShape(n) {
     root.style.setProperty('--n', n)
+
+    shapeContainter.replaceChildren();
 
     for (let i = 0; i < n; i++) {
         let div = document.createElement('div');
@@ -9,7 +13,7 @@ function main(n) {
 
         div.style.setProperty('--index', i);
 
-        document.querySelector('.shape').appendChild(div);
+        shapeContainter.appendChild(div);
     }
 
     for (let i = 0; i < n; i++) {
@@ -19,8 +23,21 @@ function main(n) {
 
         div.style.setProperty('--index', i);
 
-        document.querySelector('.shape').appendChild(div);
+        shapeContainter.appendChild(div);
     }
 }
 
-main(8)
+let numberOfSidesInput = document.querySelector('#number-of-sides');
+
+numberOfSidesInput.addEventListener('input', (event) => {
+    getNumberOfSidesAndGenerateShape(event.target)
+});
+
+function getNumberOfSidesAndGenerateShape(element) {
+    let n = element.valueAsNumber;
+    if(NaN || n) {
+        generateShape(n)
+    }
+}
+
+getNumberOfSidesAndGenerateShape(numberOfSidesInput)
