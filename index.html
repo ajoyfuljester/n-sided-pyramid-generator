@@ -10,9 +10,26 @@
 
 <body>
 
-    <div class="shape"></div>
+    <div>
+        <div class="shape"></div>
+    </div>
 
-    <input type="number" id="number-of-sides">
+    <div id="config">
+        <div>Number of sides<input type="number" id="number-of-sides" size="5" value="6" min="3"></div>
+        <div>Width<input type="number" id="width" size="10" value="30" min="1"></div>
+        <div>Height<input type="number" id="height" size="10" value="30" min="1"></div>
+        <div>Unit<select id="unit">
+            <option value="vmin">smaller viewport dimension (in %)</option>
+            <option value="vmax">bigger viewport dimension (in %)</option>
+            <option value="px">pixels</option>
+            <option value="vw">viewport width (in %)</option>
+            <option value="vh">viewport height (in %)</option>
+        </select></div>
+    </div>
+
+    <div id="disclaimer">
+        If you have noticed that size of the shape is not exact or you are interested in how this was made, you can go to dev tools "Style Editor" tab (Shift + F7), then read comments in style.css file
+    </div>
 
     <script src="script.js"></script>
 

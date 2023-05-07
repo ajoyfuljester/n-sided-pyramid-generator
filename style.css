@@ -10,9 +10,11 @@
     --side-background: linear-gradient(0deg, #46f 30%, #13a 200%);
     --base-background: radial-gradient(at 50% 0%, #13a, #46f);
 
-    --side-height: 60;
-    
-    --side-width: 20;
+    --side-height: 30;
+    --side-width: 30;
+
+    --shape-width: 200;
+    --shape-height: 200;
     
     --unit: 1vmin;
     
@@ -25,19 +27,38 @@
 
     /* Calcultions */
     
-    --side-width-in-unit: calc(var(--side-width) * var(--unit));
-    --side-height-in-unit: calc(var(--side-height) * var(--unit));
-    
     --central-angle: calc(360deg / var(--n));
     --triangle-angle: calc((180deg - var(--central-angle)) / 2);
     
-    --base-height: calc(var(--side-width) * tan(var(--triangle-angle)) / 2);
+    --side-width-in-unit: calc(var(--side-width) * var(--unit));
+    --side-height-in-unit: calc(var(--side-height) * var(--unit));
+    
     --base-height-in-unit: calc(var(--base-height) * var(--unit));
-    
-    --shape-angle: calc(acos(var(--base-height) / var(--side-height)));
-    --shape-height: calc(var(--side-height) * sin(var(--shape-angle)));
     --shape-height-in-unit: calc(var(--shape-height) * var(--unit));
+
+    /* Method 1: calculating based on specified side height and width */
+
+    --base-height: calc(var(--side-width) * tan(var(--triangle-angle)) / 2);
+    --shape-angle: calc(acos(var(--base-height) / var(--side-height)));
+    /* TO ENABLE IT YOU NEED TO UNCOMMENT THE LINE BELOW AND COMMENT THE FOUR LINES IN THE METHOD 2 */
+    /* --shape-height: calc(var(--side-height) * sin(var(--shape-angle))); */
     
+    /* Method 2: calculating based on specified shape height and width */
+    /* Somehow works to some extent????? I think calculating shape height is working properly which makes sense, 
+    but calculating side width is definetly wrong, it may be caused by base height being calculated wrong */
+    /* --base-height: calc(var(--shape-width) * sin(var(--triangle-angle) / (1 + sin(var(--triangle-angle))))); */
+
+    /* IT'S TOO HARD SO I WILL LEAVE THIS, IT WORKS OKAY, WIDTH OF THE SHAPE IS DIFFICULT TO DEFINE,
+    ESPECIALLY BECAUSE IT'S SPINNING. RIGHT NOW SHAPE WIDTH IS MINIMAL SHAPE WIDTH CALCULATED FOR NUMBER OF SIDES
+    BEING EVEN, I PROBABLY WON'T DO ANYTHING ELSE WITH IT =) */
+    /* ALSO WORKS REALLY BAD WHEN NUMBER OF SIDES IS SMALL LIKE 3 */
+
+    --base-height: calc(var(--shape-width) / 2);
+    --side-width: calc(2 * var(--base-height) / tan(var(--triangle-angle)));
+    --shape-angle: atan(calc(var(--shape-height) / var(--base-height)));
+    --side-height: calc(var(--shape-height) / sin(var(--shape-angle)));
+
+
     /* END OF Calculations */
 }
 
@@ -54,7 +75,7 @@ body {
     place-items: center;
 
     transform-style: preserve-3d;
-    transform: rotateX(100deg) rotateY(10deg);
+    transform: rotateX(90deg) rotateY(0deg);
 
     animation: spin 3s linear infinite;
 }
@@ -77,15 +98,14 @@ body {
     translate: 0 calc(var(--local-height) / 2) calc(var(--shape-height-in-unit) / -2);
     
     --local-background: var(--base-background);
-    /* display: none; */
 }
 
 .side {
     --local-height: var(--side-height-in-unit);
     translate: 0 calc(var(--local-height) / 2) calc(var(--shape-height-in-unit) / 2);
-
+    
     transform: rotateX(calc(var(--shape-angle) * -1));
-
+    
     --local-background: var(--side-background);
 }
 
@@ -103,4 +123,53 @@ body {
         rotate: .3 3 .4 360deg;
         /* rotate: x -300deg; */
     }
+}
+
+#config {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+
+    padding: 2rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    row-gap: 1rem;
+    flex-wrap: wrap;
+}
+
+#config > div {
+    color: #00f;
+    font-weight: 600;
+    font-family: Rubik;
+    font-size: 1rem;
+    
+}
+
+input, select{
+    background-color: transparent;
+    border: none;
+    
+    border: .4em #00f solid;
+    font: inherit;
+    color: inherit;
+
+    padding: .4em;
+
+    margin-left: 1rem;
+}
+
+#disclaimer {
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    max-width: min(30vw, 30ch);
+    font-size: .8rem;
+    color: #00f;
+
+    text-align: right;
+    padding: .5em;
 }

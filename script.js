@@ -28,16 +28,28 @@ function generateShape(n) {
 }
 
 let numberOfSidesInput = document.querySelector('#number-of-sides');
+let widthInput = document.querySelector('#width');
+let heightInput = document.querySelector('#height');
 
-numberOfSidesInput.addEventListener('input', (event) => {
-    getNumberOfSidesAndGenerateShape(event.target)
-});
+let inputs = [numberOfSidesInput, widthInput, heightInput]
 
-function getNumberOfSidesAndGenerateShape(element) {
-    let n = element.valueAsNumber;
-    if(NaN || n) {
-        generateShape(n)
-    }
+let unitInput = document.querySelector('#unit');
+
+inputs.forEach(element => {
+    element.addEventListener('input', (event) => {
+        updateShape(numberOfSidesInput.valueAsNumber, widthInput.valueAsNumber, heightInput.valueAsNumber)
+    })
+})
+
+function updateShape(n, width, height) {
+    root.style.setProperty('--shape-width', width);
+    root.style.setProperty('--shape-height', height);
+    generateShape(n)
+    
 }
 
-getNumberOfSidesAndGenerateShape(numberOfSidesInput)
+unitInput.addEventListener('input', event => {
+    root.style.setProperty('--unit', 1 + event.target.value)
+})
+
+updateShape(...(inputs.map(el => el.valueAsNumber)))
